@@ -1,0 +1,22 @@
+﻿@page
+@model EbikeCommerce.Pages.ProductPageModel
+
+<h2 class="text-center mt-5" asp-for="Message"></h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <img src="~/@($"images/{EbikeCommerce.DBmodel.Dictionaries.Categories[Model.Rec.category_id].Replace(" ", "_")}.png")" class="img-fluid rounded shadow" alt="@Model.Rec.product_name">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="mb-3">@Model.Rec.product_name</h2>
+            <p class="lead">Brand: <strong>@Model.Rec.brand</strong></p>
+            <p class="lead">Category: <strong>@DBmodel.Dictionaries.Categories[Model.Rec.category_id]</strong></p>
+            <p class="lead">Year: <strong>@Model.Rec.model_year</strong></p>
+            <p class="lead">Price: <strong>@Model.Rec.list_price $</strong></p>
+            <form method="post" asp-page="/Cart" asp-route-id="@Model.Rec.product_id">
+                <button type="submit" class="btn btn-primary btn-lg">Add to cart</button>
+            </form>
+        </div>
+    </div>
+</div>

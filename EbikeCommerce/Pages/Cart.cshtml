@@ -1,0 +1,51 @@
+﻿@page
+@model EbikeCommerce.Pages.CartModel
+@{
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center mb-4">Cart</h2>
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.rec != null)
+                    {
+                        @foreach (var item in Model.rec.GroupBy(x => x.product_id))
+                        {
+                            var quantity = item.Count();
+                            var product = item.First();
+                            <tr>
+                                <td>@product.product_name</td>
+                                <td>@product.list_price $</td>
+                                <td>@quantity</td>
+                                <td>@(product.list_price * quantity) $</td>
+                                <td>
+                                    <form method="post" asp-page-handler="Remove" asp-route-id="@product.product_id">
+                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="d-grid gap-2">
+                <div class="text-danger text-center mt-3">@Model.Message</div>
+                <a asp-page="/Index" class="btn btn-primary btn-lg">Continue Shopping</a>
+                <form method="post" asp-page-handler="Checkout">
+                    <button type="submit" class="btn btn-success btn-lg btn-block w-100">Buy  @(Model.rec?.Sum(x => x.list_price) ?? 0) $</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

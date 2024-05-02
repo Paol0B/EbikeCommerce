@@ -1,0 +1,185 @@
+﻿@page
+@using EbikeCommerce.DBmodel
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                @foreach (var category in Dictionaries.Categories.OrderBy(c => c.Value))
+                {
+                    <a href="#@category.Value.Replace(" ", "_")" id="list" class="card list-group-item list-group-item-action list-group-item-dark bg-dark text-light btn-outline-primary">@category.Value</a>
+                }
+
+                <br />
+
+                <h5 class="mt-3">Filters</h5>
+
+                <form method="post" asp-page-handler="Search" class="mt-3">
+                    <div class="input-group">
+                        <input asp-for="SearchText" class="form-control bg-dark text-white btn-outline-primary" placeholder="Search...">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+
+                <hr class="bg-light" />
+
+                <form method="post" asp-page-handler="Filter" class="mt-3">
+                    <label class="form-label">Year</label>
+                    <div class="input-group">
+                        <select asp-for="FilterYear" class="form-select bg-dark text-white btn-outline-primary" aria-label="Default select example" id="yearSelect">
+                            <option value="">All</option>
+                            @for (int i = DateTime.Now.Year; i >= 2015; i--)
+                            {
+                                <option>@i</option>
+                            }
+                        </select>
+                    </div>
+
+                    <label class="form-label">Price</label>
+                    <div class="input-group">
+                        <select asp-for="FilterPrice" class="form-select bg-dark text-white btn-outline-primary" aria-label="Default select example">
+                            <option value="">All</option>
+                            <option value="1">0-500 $</option>
+                            <option value="2">500-1000 $</option>
+                            <option value="3">1000-2000 $</option>
+                            <option value="4">2000-5000 $</option>
+                            <option value="5">5000+ $</option>
+                        </select>
+                    </div>
+
+                    <label class="form-label">Brand</label>
+                    <div class="input-group">
+                        <select asp-for="FilterBrand" class="form-select bg-dark text-white btn-outline-primary" aria-label="Default select example">
+                            <option value="">All</option>
+                            @foreach (var brand in Dictionaries.Brands.OrderBy(b => b.Value))
+                            {
+                                <option value="@brand.Key">@brand.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <br />
+                    <div class="input-group w-100">
+                        <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+        <div class="col-md-9">
+            @foreach (var category in Dictionaries.Categories.OrderBy(c => c.Value))
+            {
+                <div id="@category.Value.Replace(" ", "_")" class="container bg-dark text-light py-5 mb-5">
+                    <h2 class="text-light">@category.Value</h2>
+                    <div class="row">
+                        @foreach (var item in Model.ProductRecords.Where((Func<ProductRecord, bool>)(p => p.category_id == category.Key)).OrderBy(p => p.product_name))
+                        {
+                            <div class="col-md-4 mb-4 product-card-animation">
+                                <div class="card bg-secondary text-light h-100">
+                                    <a href="@Url.Page("ProductPage", new { id = item.product_id })" class="text-decoration-none">
+                                        <img class="card-img-top" src="@($"images/{category.Value.Replace(" ", "_")}.png")" alt="@item.product_name image">
+                                    </a>
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">@item.product_name</h5>
+                                        <p class="card-text">Brand: <strong>@item.brand</strong></p>
+                                        <p class="card-text">Category: <strong>@category.Value</strong></p>
+                                        <p class="card-text">Year: <strong>@item.model_year</strong></p>
+                                        <p class="card-text">Price: <strong>@item.list_price $</strong></p>
+                                        <form method="post" class="mt-auto" asp-page="/Cart" asp-route-id="@item.product_id">
+                                            <button type="submit" class="btn btn-primary mt-auto w-100">Add to Cart</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">▲</button>
+
+
+<style>
+    .product-card-animation {
+        opacity: 0;
+        transform: translateY(20px); /* Spostamento verso il basso di 20px */
+        transition: opacity 0.5s ease, transform 0.5s ease; /* Transizioni per opacità e trasformazione */
+    }
+
+        .product-card-animation.card-loaded {
+            opacity: 1;
+            transform: translateY(0); /* Nessuno spostamento */
+        }
+
+
+
+
+    .card {
+        transition: transform .2s; /* Animazione fluida */
+    }
+
+        .card:hover {
+            transform: scale(1.05); /* (105% zoom - CSS3 only) */
+        }
+
+    #myBtn {
+        display: none; /* Nascondi il pulsante per default */
+        position: fixed; /* Posizione fissa */
+        bottom: 20px; /* Distanza dal fondo della pagina */
+        right: 30px; /* Distanza dal lato destro della pagina */
+        z-index: 99; /* Assicurati che sia sopra gli altri elementi della pagina */
+        border: none; /* Rimuovi il bordo */
+        outline: none; /* Rimuovi l'outline */
+        background-color: darkgrey; /* Colore di sfondo */
+        color: white; /* Colore del testo */
+        cursor: pointer; /* Aggiungi un puntatore al passaggio del mouse */
+        padding: 15px; /* Spazio intorno al testo */
+        border-radius: 10px; /* Angoli arrotondati */
+        font-size: 15px; /* Dimensione del testo */
+    }
+
+        #myBtn:hover {
+            background-color: #555; /* Cambia colore al passaggio del mouse */
+        }
+</style>
+
+
+<script>
+
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("myBtn").style.display = "block";
+        } else {
+            document.getElementById("myBtn").style.display = "none";
+        }
+    }
+
+
+    function topFunction() {
+        document.body.scrollTop = 0; // Per Safari
+        document.documentElement.scrollTop = 0; // Per Chrome, Firefox, IE e Opera
+    }
+
+    window.addEventListener('load', function () {
+        var productCards = document.querySelectorAll('.product-card-animation');
+        productCards.forEach(function (card) {
+            card.classList.add('card-loaded');
+        });
+    });
+
+    $(document).ready(function () {
+        $('#yearSelect').select2();
+    });
+
+</script>

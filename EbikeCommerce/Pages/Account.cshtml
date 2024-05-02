@@ -1,0 +1,96 @@
+﻿@page
+@model EbikeCommerce.Pages.AccountModel
+@{
+
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Account</h2>
+                    <form method="post" asp-page-handler="Account">
+                        <div class="mb-3">
+                            <input asp-for="CustomerRecord.customer_id" class="form-control" hidden />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.first_name" class="control-label">First Name</label>
+                            <input asp-for="CustomerRecord.first_name" class="form-control" disabled/>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.last_name" class="control-label">Last Name</label>
+                            <input asp-for="CustomerRecord.last_name" class="form-control" disabled />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.email" class="control-label">Email</label>
+                            <input asp-for="CustomerRecord.email" class="form-control" placeholder="Es: ferrarafabio@gmail.com"/>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.username" class="control-label">Username</label>
+                            <input asp-for="CustomerRecord.username" class="form-control" placeholder="Karen66"/>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.phone" class="control-label">Phone</label>
+                            <input asp-for="CustomerRecord.phone" class="form-control" placeholder="Es: +39 3966665898"/>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CustomerRecord.street" class="control-label">Street</label>
+                            <input asp-for="CustomerRecord.street" class="form-control" placeholder="Es: Via delle rose 16" />
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label asp-for="CustomerRecord.city" class="control-label">City</label>
+                                    <input asp-for="CustomerRecord.city" class="form-control" placeholder="Torino"/>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label asp-for="CustomerRecord.state" class="control-label">State</label>
+                                    <input asp-for="CustomerRecord.state" class="form-control" placeholder="Es: IT"/>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label asp-for="CustomerRecord.zip_code" class="control-label">Zip Code</label>
+                                    <input asp-for="CustomerRecord.zip_code" class="form-control" placeholder="Es: 10151" maxlength="5" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-block">Update</button>
+                        </div>
+                        <div class="text-danger text-center mt-3">@Model.MessageAcc</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Change Password</h2>
+                    <form method="post" asp-page-handler="ChangePassword">
+                        <div class="mb-3">
+                            <label asp-for="OldPassword" class="control-label">Old Password</label>
+                            <input asp-for="OldPassword" class="form-control" type="password" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewPassword" class="control-label">New Password</label>
+                            <input asp-for="NewPassword" class="form-control" type="password" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+                        </div>
+                        <div class="text-danger text-center mt-3">@Model.MessagePass</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

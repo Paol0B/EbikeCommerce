@@ -1,0 +1,46 @@
+﻿@page
+@model EbikeCommerce.Pages.RegisterModel
+@{
+}
+<!--make register page-->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Register</h2>
+                    <form method="post" asp-page-handler="Register">
+                        <div class="mb-3">
+                            <label for="FirstName" class="form-label">First Name</label>
+                            <input type="text" id="FirstName" name="FirstName" class="form-control bg-secondary text-white" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="LastName" class="form-label">Last Name</label>
+                            <input type="text" id="LastName" name="LastName" class="form-control bg-secondary text-white" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">Username</label>
+                            <input type="text" id="Username" name="Username" class="form-control bg-secondary text-white" placeholder="Enter your username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email</label>
+                            <input type="email" id="Email" name="Email" class="form-control bg-secondary text-white" placeholder="Enter your email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password</label>
+                            <input type="password" id="Password" name="Password" class="form-control bg-secondary text-white" placeholder="Enter your password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control bg-secondary text-white" placeholder="Confirm your password" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                        </div>
+                        <div class="text-danger text-center mt-3">@Model.Message</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

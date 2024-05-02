@@ -1,0 +1,94 @@
+﻿@page
+@using EbikeCommerce.DBmodel
+@model EbikeCommerce.Pages.CheckoutModel
+@{
+}
+
+<h1>Checkout</h1>
+
+@if (DBservice.CheckAddress(User?.Identity?.Name))
+{
+    <form method="post" asp-page-handler="UpdateAddress">
+        <h2>Customer Information</h2>
+        <p class="text-warning">Enter your information below to complete your purchase.</p>
+        <div class="form-group">
+            <input asp-for="Customer.customer_id" class="form-control" hidden />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.username"></label>
+            <input asp-for="Customer.username" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.street"></label>
+            <input asp-for="Customer.street" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.city"></label>
+            <input asp-for="Customer.city" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.state"></label>
+            <input asp-for="Customer.state" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.zip_code"></label>
+            <input asp-for="Customer.zip_code" class="form-control" required />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+}
+else
+{
+    <p class="text-warning">@Model.Message</p>
+    <form method="post" asp-page-handler="Buy">
+        <div class="card mx-auto bg-dark text-white" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Payment Information</h5>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" class="form-control btn-outline-primary bg-dark text-white" id="cardNumber" asp-for="card.card_number" placeholder="Enter card number" pattern="\d{4} \d{4} \d{4} \d{4}" required oninput="this.value = this.value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim()" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cardExpiration">Expiration Date</label>
+                        <br />
+                        <div class="input-group">
+                            <select class="form-control btn-outline-primary bg-dark text-white" asp-for="card.expiration_month" id="cardExpirationMonth" required>
+                                <option value="" disabled selected>Month</option>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option value="@i.ToString("D2")">@i.ToString("D2")</option>
+                                }
+                            </select>
+                            <select class="form-control btn-outline-primary bg-dark text-white" asp-for="card.expiration_year" id="cardExpirationYear" required>
+                                <option value="" disabled selected>Year</option>
+                                @{
+                                    int currentYear = DateTime.Now.Year;
+                                    for (int i = currentYear; i <= currentYear + 10; i++)
+                                    {
+                                        string year = (i % 100).ToString("D2");
+                                        <option value="@year">@year</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cardCVC">CVC</label>
+                        <input type="text" class="form-control btn-outline-primary bg-dark text-white" asp-for="card.cvv" id="cardCVC" placeholder="CVC" maxlength="3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control btn-outline-primary bg-dark text-white" id="Name" asp-for="card.Name" placeholder="Name">
+                    </div>
+                </div>
+                <br />
+                <div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block w-100">Buy</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+}

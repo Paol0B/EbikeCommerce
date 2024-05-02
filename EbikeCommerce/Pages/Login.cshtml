@@ -1,0 +1,55 @@
+﻿@page
+@model EbikeCommerce.Pages.LoginModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Login</h2>
+                    <form method="post" asp-page-handler="Login">
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">Username or Email</label>
+                            <input type="text" id="Username" name="Username" class="form-control bg-secondary text-white" placeholder="Inserisci il tuo username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password</label>
+                            <input type="password" id="Password" name="Password" class="form-control bg-secondary text-white" placeholder="Inserisci la tua password" required>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" onclick="showPasswd()" id="flexSwitchCheckChecked" >
+                                <label class="form-check-label" >Show password</label>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <a href="/Register" class="btn btn-secondary btn-block">Register</a>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="/ForgotPassword">Hai dimenticato la password?</a>
+                        </div>
+                        <div class="text-center mt-3">
+                            <label class="text-warning text-center mt-3">@Model.Message</label>
+                            <input asp-for="Message" class="form-control" hidden />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showPasswd() {
+        var x = document.getElementById("Password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
+
