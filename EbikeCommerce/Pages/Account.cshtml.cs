@@ -1,7 +1,9 @@
 using EbikeCommerce.DBmodel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QRCoder;
 using System;
+using OtpNet;
 
 namespace EbikeCommerce.Pages
 {
@@ -14,10 +16,14 @@ namespace EbikeCommerce.Pages
         public string? ConfirmPassword { get; set; }
         public string? MessagePass { get; set; }
         public string? MessageAcc { get; set; }
+        public string? QrCode { get; set; }
+
+        public bool TwoFactorEnabled { get; set; }
 
         public IActionResult OnGet()
         {
             CustomerRecord = DBservice.GetbyUser(User.Identity?.Name)!;
+
 
             if (CustomerRecord == null)
             {
@@ -25,8 +31,100 @@ namespace EbikeCommerce.Pages
                 return StatusCode(500);
             }
 
+            if (!string.IsNullOrWhiteSpace(CustomerRecord.mfa))
+            {
+                TwoFactorEnabled = true;
+                ShowQR();
+            }
+
+
+
+
             return Page();
         }
+
+
+
+        //qr
+        public IActionResult OnPostCreateMFA()
+        {
+           CustomerRecord = DBservice.GetbyUser(User.Identity?.Name)!;
+            if (string.IsNullOrWhiteSpace(CustomerRecord.mfa))
+            {
+                ShowQR();
+            }
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostRemoveMfa()
+        {
+            CustomerRecord = DBservice.GetbyUser(User.Identity?.Name)!;
+            CustomerRecord.mfa = "";
+            DBservice.UpdateCustomer(CustomerRecord);
+            return RedirectToPage();
+        }
+
+
+        public IActionResult ShowQR()
+        {
+            string accountName = User.Identity?.Name!;
+            string issuer = "PB-Shop";
+            string otpSecret = GenerateOtpSecret();
+            string newotpUri = GenerateOtpUri(accountName, issuer, otpSecret);
+            CustomerRecord = DBservice.GetbyUser(User.Identity?.Name)!;
+
+            if (accountName is null)
+                return Page();
+
+
+            if (string.IsNullOrWhiteSpace(CustomerRecord.mfa))
+            {
+                QRCodeGenerator qrGenerator = new ();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(newotpUri, QRCodeGenerator.ECCLevel.Q);
+                PngByteQRCode qrCode = new (qrCodeData);
+                byte[] qrCodeBytes = qrCode.GetGraphic(20);
+                QrCode = "data:image/png;base64," + Convert.ToBase64String(qrCodeBytes);
+                // Update the record with the new otp secret
+                CustomerRecord.mfa = otpSecret;
+                DBservice.UpdateCustomer(CustomerRecord);
+
+            }
+            else
+            {
+                TwoFactorEnabled = true;
+
+                string otpUri = GenerateOtpUri(accountName, issuer, CustomerRecord.mfa!);
+
+
+
+                QRCodeGenerator qrGenerator = new ();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(otpUri, QRCodeGenerator.ECCLevel.Q);
+                PngByteQRCode qrCode = new (qrCodeData);
+                byte[] qrCodeBytes = qrCode.GetGraphic(20);
+                QrCode = "data:image/png;base64," + Convert.ToBase64String(qrCodeBytes);
+            }
+
+            return Page();
+        }
+
+        static string GenerateOtpSecret()
+        {
+            var otpSecret = KeyGeneration.GenerateRandomKey(20);
+            return Base32Encoding.ToString(otpSecret);
+        }
+
+        static string GenerateOtpUri(string accountName, string issuer, string otpSecret)
+        {
+            var otpAuthUri = $"otpauth://totp/{Uri.EscapeDataString(issuer)}:{Uri.EscapeDataString(accountName)}?secret={Uri.EscapeDataString(otpSecret)}&issuer={Uri.EscapeDataString(issuer)}";
+            return otpAuthUri;
+        }
+
+        public static bool CompareOtpCode(string otpSecret, string inputCode)
+        {
+            var otp = new Totp(Base32Encoding.ToBytes(otpSecret));
+            return otp.VerifyTotp(inputCode, out _);
+        }
+        //end qr
 
         public IActionResult OnPostAccount()
         {

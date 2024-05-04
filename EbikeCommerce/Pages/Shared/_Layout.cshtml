@@ -36,7 +36,7 @@
                     {
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item text-end">
-                                <a asp-page="/Account" class="nav-link">Account (@User.Identity.Name)</a>
+                                <a asp-page="/Account" class="nav-link"><i class="bi bi-person-fill"></i>@User.Identity.Name</a>
                             </li>
                             <li class="nav-item text-end">
                                 <a class="nav-link" asp-page="/Login" asp-page-handler="Logout">Logout</a>

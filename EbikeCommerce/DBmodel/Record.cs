@@ -40,6 +40,7 @@
         public string? city { get; init; }
         public string? state { get; init; }
         public string? zip_code { get; init; }
+        public string? mfa { get; set; }
     }
 
     public record Cart

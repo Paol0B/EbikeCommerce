@@ -1,52 +1,53 @@
+using EbikeCommerce.DBmodel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using OtpNet;
+using QRCoder;
+using System.Dynamic;
 using System.Security.Claims;
-using EbikeCommerce.DBmodel;
+using System.Xml.Schema;
 
 namespace EbikeCommerce.Pages
 {
-    public class LoginModel : PageModel
+    [BindProperties]
+    public class MfaModel : PageModel
     {
-        [BindProperty]
         public required string Username { get; set; }
-
-        [BindProperty]
-        public required string Password { get; set; }
-
-        [BindProperty]
+        public required string Code { get; set; }
+        public required string GoToCat { get; set; }
         public required string Message { get; set; }
 
-        public void OnGet(string? message)
+        CustomerRecord? rec;
+
+        public void OnGet(string username, string Message)
         {
-            Message = message ?? string.Empty;
+            GoToCat = Message;
+            Username = username;
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostVerify()
         {
-            return Page();
-        }
 
-        public IActionResult OnPostLogin(string message)
-        {
-            try
+            rec = DBservice.GetbyUser(Username);
+            if (rec == null)
+                return Page();
+
+            if (User == null)
             {
+                return NotFound();
+            }
+
+            if (string.IsNullOrWhiteSpace(rec.mfa))
+            {
+                return NotFound();
+            }
+
+            if (CompareOtpCode(rec.mfa, Code))
+            {
+
                 var claims = new List<Claim>();
-                
-
-                if (!DBservice.CheckLogin(Password, Username))
-                {
-                    Message = "Invalid login attempt.";
-                    return Page();
-                }
-                CustomerRecord rec = DBservice.GetbyUser(Username)!;
-
-
-                if (!string.IsNullOrWhiteSpace(rec.mfa))
-                {
-                    return RedirectToPage("/Mfa", new { Username, Message });
-                }
 
                 Username = !string.IsNullOrEmpty(DBservice.FindUserByEmail(Username)) ? DBservice.FindUserByEmail(Username) : Username;
 
@@ -65,27 +66,23 @@ namespace EbikeCommerce.Pages
                 // Sign In.  
                 authenticationManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
 
-                if (message == "You must LogIn before buy")
+                if (GoToCat == "You must LogIn before buy")
                 {
                     return RedirectToPage("/Cart");
                 }
-
-                return RedirectToPage("/index");
+                return RedirectToPage("/Index");
             }
-            catch (Exception)
+            else 
             {
+                Message = "Invalid code";
                 return Page();
             }
         }
 
-        public IActionResult OnGetLogout()
+        public static bool CompareOtpCode(string otpSecret, string inputCode)
         {
-            var authenticationManager = Request.HttpContext;
-
-            // Sign Out.  
-            authenticationManager.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            return this.RedirectToPage("/Index");
+            var otp = new Totp(Base32Encoding.ToBytes(otpSecret));
+            return otp.VerifyTotp(inputCode, out _);
         }
     }
 }

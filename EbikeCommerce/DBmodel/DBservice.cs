@@ -262,7 +262,8 @@ namespace EbikeCommerce.DBmodel
                     street = reader.IsDBNull(7) ? null : reader.GetString(7),
                     city = reader.IsDBNull(8) ? null : reader.GetString(8),
                     state = reader.IsDBNull(9) ? null : reader.GetString(9),
-                    zip_code = reader.IsDBNull(10) ? null : reader.GetString(10)
+                    zip_code = reader.IsDBNull(10) ? null : reader.GetString(10),
+                    mfa = reader.IsDBNull(11) ? null : reader.GetString(11),
                 };
             }
             catch (SqlException ex)
@@ -332,6 +333,12 @@ namespace EbikeCommerce.DBmodel
                     {
                         cmd.CommandText += "zip_code = @zip_code, ";
                         cmd.Parameters.AddWithValue("@zip_code", rec.zip_code);
+                    }
+
+                    if (rec.mfa != null)
+                    {
+                        cmd.CommandText += "mfa = @mfa, ";
+                        cmd.Parameters.AddWithValue("@mfa", rec.mfa);
                     }
 
                     cmd.CommandText = cmd.CommandText.TrimEnd(',', ' ');
