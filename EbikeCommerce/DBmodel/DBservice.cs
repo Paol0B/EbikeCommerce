@@ -410,7 +410,7 @@ namespace EbikeCommerce.DBmodel
                         {
                             int quantity = reader.GetInt32(0);
 
-                            if (quantity > qta)
+                            if (quantity >= qta)
                             {
                                 return true;
                             }

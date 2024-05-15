@@ -19,7 +19,7 @@ namespace EbikeCommerce.Pages
 
         public void OnGet()
         {
-            List<int>? ids = HttpContext.Session.GetObject<List<int>>("Carrello");
+            List<int>? ids = HttpContext.Session.GetObject<List<int>>($"Carrello-{User?.Identity?.Name}");
 
             if (ids is null)
             {
@@ -42,11 +42,11 @@ namespace EbikeCommerce.Pages
             if (User.Identity?.Name == null || card == null)
                 return Page();
 
-            List<int> cart = HttpContext.Session.GetObject<List<int>>("Carrello") ?? [];
+            List<int> cart = HttpContext.Session.GetObject<List<int>>($"Carrello-{User?.Identity?.Name}") ?? [];
 
             if (DBservice.Buy(user: User.Identity.Name, cart))
             {
-                HttpContext.Session.Remove("Carrello");
+                HttpContext.Session.Remove($"Carrello-{User?.Identity?.Name}");
 
                 return RedirectToPage("/Index");
             }
