@@ -33,23 +33,20 @@ namespace EbikeCommerce.Pages
             try
             {
                 var claims = new List<Claim>();
-                
+                Username = !string.IsNullOrEmpty(DBservice.FindUserByEmail(Username)) ? DBservice.FindUserByEmail(Username) : Username;
+                CustomerRecord rec = DBservice.GetbyUser(Username)!;
+
 
                 if (!DBservice.CheckLogin(Password, Username))
                 {
                     Message = "Invalid login attempt.";
                     return Page();
                 }
-                CustomerRecord rec = DBservice.GetbyUser(Username)!;
-
 
                 if (!string.IsNullOrWhiteSpace(rec.mfa))
                 {
                     return RedirectToPage("/Mfa", new { Username, Message });
                 }
-
-                Username = !string.IsNullOrEmpty(DBservice.FindUserByEmail(Username)) ? DBservice.FindUserByEmail(Username) : Username;
-
 
                 //Setting  
                 claims.Add(new Claim(ClaimTypes.Name, Username));
