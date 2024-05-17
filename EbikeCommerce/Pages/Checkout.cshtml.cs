@@ -2,7 +2,6 @@ using EbikeCommerce.DBmodel;
 using EbikeCommerce.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Numerics;
 
 namespace EbikeCommerce.Pages
 {
@@ -28,7 +27,7 @@ namespace EbikeCommerce.Pages
                 return;
             }
 
-            Customer = DBservice.GetbyUser(User.Identity?.Name)!;
+            Customer = DBservice.GetbyUser(User?.Identity?.Name)!;
         }
 
         public IActionResult OnPostUpdateAddress() 
@@ -39,12 +38,12 @@ namespace EbikeCommerce.Pages
 
         public IActionResult OnPostBuy()
         {
-            if (User.Identity?.Name == null || card == null)
+            if (User?.Identity?.Name == null || card == null)
                 return Page();
 
             List<int> cart = HttpContext.Session.GetObject<List<int>>($"Carrello-{User?.Identity?.Name}") ?? [];
 
-            if (DBservice.Buy(user: User.Identity.Name, cart))
+            if (DBservice.Buy(user: User?.Identity.Name!, cart))
             {
                 HttpContext.Session.Remove($"Carrello-{User?.Identity?.Name}");
 

@@ -15,7 +15,7 @@ namespace EbikeCommerce.Pages
         public required string ConfirmPassword { get; set; }
         public string? Message { get; set; }
 
-        public CustomerRecord Customer { get; set; }
+        public CustomerRecord? Customer { get; set; }
 
         public void OnGet()
         {

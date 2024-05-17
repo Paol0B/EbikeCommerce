@@ -3,14 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EbikeCommerce.Pages
 {
-    public class PrivacyModel : PageModel
+    public class PrivacyModel(ILogger<PrivacyModel> logger) : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<PrivacyModel> _logger = logger;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
-        {
-            _logger = logger;
-        }
+        public ILogger<PrivacyModel> Logger => _logger;
 
         public void OnGet()
         {

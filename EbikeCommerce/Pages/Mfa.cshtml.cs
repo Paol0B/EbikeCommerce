@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OtpNet;
-using QRCoder;
-using System.Dynamic;
 using System.Security.Claims;
-using System.Xml.Schema;
 
 namespace EbikeCommerce.Pages
 {

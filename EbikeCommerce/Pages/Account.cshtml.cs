@@ -2,7 +2,6 @@ using EbikeCommerce.DBmodel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using QRCoder;
-using System;
 using OtpNet;
 
 namespace EbikeCommerce.Pages

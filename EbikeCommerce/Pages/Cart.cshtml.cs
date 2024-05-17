@@ -27,7 +27,7 @@ namespace EbikeCommerce.Pages
             {
                 return RedirectToPage("/Login", new { message = "You must LogIn before buy" });
             }
-            if (carrello != null && carrello.Any()) 
+            if (carrello != null && carrello.Count != 0) 
             {
                 return RedirectToPage("/Checkout");
             }
