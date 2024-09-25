@@ -5,7 +5,7 @@ namespace EbikeCommerce.DBmodel
 {
     public static class DBservice
     {
-        static readonly string ConnString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BikeStores;Integrated Security=True;";
+        static readonly string ConnString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EBikeCommerce;Integrated Security=True;";
 
         public static async Task<List<ProductRecord>> OnGetDataAsync()
         {
