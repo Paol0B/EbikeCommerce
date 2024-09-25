@@ -1,57 +1,58 @@
-#EbikeCommerce
+# EbikeCommerce
 
-###EbikeCommerce è un esempio di e-commerce per un negozio di biciclette elettriche. Questo progetto è stato sviluppato per dimostrare le funzionalità di base di un’applicazione di e-commerce.
-##Funzionalità
+**EbikeCommerce** è un esempio di e-commerce per un negozio di biciclette elettriche. Questo progetto è stato sviluppato per dimostrare le funzionalità di base di un'applicazione di e-commerce.
 
-    Visualizzazione di diverse categorie di biciclette (e.g., biciclette elettriche, mountain bike, biciclette da strada)
-    Dettagli del prodotto con immagini e descrizioni
-    Aggiunta di prodotti al carrello
-    Gestione del carrello e del checkout
-    Gestione degli account utente: registrazione, login e gestione del profilo
-    Cambio password: possibilità di cambiare la password dell’account
-    Autenticazione a due fattori (2FA): maggiore sicurezza per gli account utente
+## Funzionalità
 
-##Tecnologie Utilizzate
+- Visualizzazione di diverse categorie di biciclette (e.g., biciclette elettriche, mountain bike, biciclette da strada)
+- Dettagli del prodotto con immagini e descrizioni
+- Aggiunta di prodotti al carrello
+- Gestione del carrello e del checkout
+- **Gestione degli account utente**: registrazione, login e gestione del profilo
+- **Cambio password**: possibilità di cambiare la password dell'account
+- **Autenticazione a due fattori (2FA)**: maggiore sicurezza per gli account utente
 
-    C#: 57.5%
-    HTML: 40.5%
-    CSS: 1.7%
-    JavaScript: 0.3%
+## Tecnologie Utilizzate
 
-##Struttura del Progetto
+- **C#**: 57.5%
+- **HTML**: 40.5%
+- **CSS**: 1.7%
+- **JavaScript**: 0.3%
 
-    EbikeCommerce.sln: Soluzione principale del progetto
-    *.png e *.jpg: Immagini delle biciclette
-    .editorconfig, .gitattributes, .gitignore: File di configurazione
+## Struttura del Progetto
 
-##Installazione
+- `EbikeCommerce.sln`: Soluzione principale del progetto
+- `*.png` e `*.jpg`: Immagini delle biciclette
+- `.editorconfig`, `.gitattributes`, `.gitignore`: File di configurazione
 
-    Clona il repository:
+## Installazione
 
+1. Clona il repository:
+    ```bash
     git clone https://github.com/Paol0B/EbikeCommerce.git
+    ```
+2. Apri la soluzione `EbikeCommerce.sln` con Visual Studio.
+3. Compila e avvia il progetto.
 
-    Apri la soluzione EbikeCommerce.sln con Visual Studio.
-    Compila e avvia il progetto.
+## Contribuire
 
-##Contribuire
+Se desideri contribuire al progetto, segui questi passaggi:
 
-###Se desideri contribuire al progetto, segui questi passaggi:
-
-    Fai un fork del repository.
-    Crea un nuovo branch:
-
+1. Fai un fork del repository.
+2. Crea un nuovo branch:
+    ```bash
     git checkout -b feature/nome-feature
-
-    Fai le tue modifiche e committale:
-
+    ```
+3. Fai le tue modifiche e committale:
+    ```bash
     git commit -m "Aggiunta di una nuova funzionalità"
-
-    Pusha il branch:
-
+    ```
+4. Pusha il branch:
+    ```bash
     git push origin feature/nome-feature
+    ```
+5. Apri una pull request.
 
-    Apri una pull request.
-
-#Licenza
+## Licenza
 
 Questo progetto è distribuito sotto la licenza MIT. Vedi il file LICENSE per maggiori dettagli.
