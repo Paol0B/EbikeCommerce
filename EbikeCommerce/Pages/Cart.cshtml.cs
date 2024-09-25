@@ -7,11 +7,10 @@ namespace EbikeCommerce.Pages
 {
     public class CartModel : PageModel
     {
-        public List<ProductRecord> rec { get; set; } = [];
+        public List<ProductRecord> rec { get; set; } = new List<ProductRecord>();
 
         [BindProperty]
         public string? Message { get; set; }
-
 
         public IActionResult OnGet()
         {
@@ -21,13 +20,13 @@ namespace EbikeCommerce.Pages
 
         public IActionResult OnPostCheckout()
         {
-            List<int>? carrello = HttpContext.Session.GetObject<List<int>>("Carrello");
+            List<int>? carrello = HttpContext.Session.GetObject<List<int>>($"Carrello-{User.Identity!.Name}");
 
             if (User?.Identity?.IsAuthenticated == false)
             {
                 return RedirectToPage("/Login", new { message = "You must LogIn before buy" });
             }
-            if (carrello != null && carrello.Any()) 
+            if (carrello != null && carrello.Any())
             {
                 return RedirectToPage("/Checkout");
             }
@@ -42,7 +41,7 @@ namespace EbikeCommerce.Pages
         public IActionResult OnPost(int id)
         {
             int qta;
-            List<int>? carrello = HttpContext.Session.GetObject<List<int>>("Carrello") ?? [];
+            List<int>? carrello = HttpContext.Session.GetObject<List<int>>($"Carrello-{User.Identity!.Name}") ?? new List<int>();
 
             if (carrello.Contains(id))
                 qta = carrello.Count(x => x == id);
@@ -64,30 +63,30 @@ namespace EbikeCommerce.Pages
 
         public IActionResult OnPostRemove(int id)
         {
-            List<int> carrello = HttpContext.Session.GetObject<List<int>>("Carrello") ?? [];
+            List<int> carrello = HttpContext.Session.GetObject<List<int>>($"Carrello-{User.Identity!.Name}") ?? new List<int>();
             carrello.Remove(id);
 
-            HttpContext.Session.SetObject("Carrello", carrello);
+            HttpContext.Session.SetObject($"Carrello-{User.Identity!.Name}", carrello);
             return RedirectToPage();
         }
 
         public void Add(int idProdotto)
         {
             // Recupera la lista del carrello dalla sessione
-            List<int> carrello = HttpContext.Session.GetObject<List<int>>("Carrello") ?? [];
+            List<int> carrello = HttpContext.Session.GetObject<List<int>>($"Carrello-{User.Identity!.Name}") ?? new List<int>();
 
             // Aggiungi l'ID del prodotto al carrello
             carrello.Add(idProdotto);
 
             // Salva la lista del carrello nella sessione
-            HttpContext.Session.SetObject("Carrello", carrello);
+            HttpContext.Session.SetObject($"Carrello-{User.Identity!.Name}", carrello);
 
             rec.AddRange(GetRecordsFromSessionList()!);
         }
 
         private List<ProductRecord?> GetRecordsFromSessionList()
         {
-            List<int> carrello = HttpContext.Session.GetObject<List<int>>("Carrello") ?? [];
+            List<int> carrello = HttpContext.Session.GetObject<List<int>>($"Carrello-{User.Identity!.Name}") ?? new List<int>();
 
             return carrello
                 .Select(DBservice.GetbyID)
