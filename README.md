@@ -32,7 +32,8 @@
     git clone https://github.com/Paol0B/EbikeCommerce.git
     ```
 2. Apri la soluzione `EbikeCommerce.sln` con Visual Studio.
-3. Compila e avvia il progetto.
+3. Crea il DB (le query sono nel progetto nella cartella "QUERY")
+4. Compila e avvia il progetto.
 
 ## Contribuire
 
