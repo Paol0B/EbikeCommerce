@@ -82,4 +82,9 @@
         public int expiration_year { get; set; }
         public required string cvv { get; set; }
     }
+
+    public record Settings
+    {
+        public required string ConnString { get; set; }
+    }
 }

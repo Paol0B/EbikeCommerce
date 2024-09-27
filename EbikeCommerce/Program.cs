@@ -1,3 +1,4 @@
+using EbikeCommerce.DBmodel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,8 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
 });
+
+DBservice.ConnString = builder.Configuration.GetSection(nameof(Settings)).GetValue<string>("ConnString");
 
 builder.Services.AddRazorPages();
 
